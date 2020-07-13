@@ -10,6 +10,8 @@ chmod +x index.js
 ./index.js
 ```
 
+## Screenshots
+![Screenshot](https://user-images.githubusercontent.com/45785817/87336900-341bf080-c560-11ea-8d37-d70bd4f3cf50.png)
 
 ***
 * This CLI tool is made using:
