@@ -1,0 +1,15 @@
+{
+  "name": "pmm-framework-cli",
+  "version": "1.0.0",
+  "description": "User friendly CLI tool to use pmm-framework.sh",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Meet Patel",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^5.1.0",
+    "enquirer": "^2.3.6"
+  }
+}
