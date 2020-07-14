@@ -1,7 +1,14 @@
 #!/usr/bin/env node
 
-const commander = require('commander'); // TODO: Make script more CLI friendly, provide description etc. using CommanderJS
+const program = require('commander'); // TODO: Make script more CLI friendly, provide description etc. using CommanderJS
 const { Input, Select, MultiSelect, NumberPrompt } = require('enquirer');
+
+// CommanderJS configuration for CLI flags and help menu
+program
+  .version('1.0.0')
+  .description('A CLI tool to use pmm-framework and setup pmm-server, pmm-client with DBs instances locally or inside dedicated Vagrant boxes.');
+
+program.parse(process.argv);
 
 let parameter_string = "./pmm-framework.sh --pmm2"; // Flags and parameters to be provided when pmm-framework.sh is executed
 
@@ -49,6 +56,16 @@ const questions = {
   q_db_count: {
     name: 'number',
     message: 'Please tell number of instances: '
+  },
+  q_setup_vagrant : {
+    name: 'Install Vagrant or not',
+    message: 'Do you want to setup new Vagrant Box for configuration? ',
+    choices: ['Yes', 'No']
+  },
+  q_vagrant_os : {
+    name: 'Vagrant OS',
+    message: 'Select OS for the Vagrant Box: ',
+    choices: ['Ubuntu', 'CentOS']
   }
 }
 
@@ -119,10 +136,64 @@ async function install_client(){
     parameter_string += " --addclient=" + db_list[db_index] + "," + db_count[db_list[db_index]].toString();
 
     // TODO: DB Specific flags (eg. sharding, query source)
+    if(db_list[db_index] == 'ps'){
+      await ps_flags();
+    }else if(db_list[db_index] == 'ms'){
+      await ms_flags();
+    }else if(db_list[db_index] == 'md'){
+      await md_flags();
+    }else if(db_list[db_index] == 'pxc'){
+      await pxc_flags();
+    }else if(db_list[db_index] == 'mo'){
+      await mo_flags();
+    }else if(db_list[db_index] == 'pgsql'){
+      await pgsql_flags();
+    }
+
+  }
+
+  // Ask if setup needs to be done on new Vagrant box
+  let setup_vagrant = await new Select(questions.q_setup_vagrant).run();
+  if(setup_vagrant == "Yes"){
+    await vagrant_up();
   }
 
   console.log("Database instances count: ", db_count);
   console.log(parameter_string);
+}
+
+async function ps_flags(){
+
+}
+
+async function ms_flags(){
+
+}
+
+async function md_flags(){
+
+}
+
+async function pxc_flags(){
+
+}
+
+async function mo_flags(){
+
+}
+
+async function pgsql_flags(){
+
+}
+
+async function vagrant_up(){
+  console.log("\nVagrant Box setup in progress...");
+  let vagrant_os = await new Select(questions.q_vagrant_os).run();
+  if(vagrant_os == "Ubuntu"){
+    
+  }else{
+
+  }
 }
 
 getConfig();
