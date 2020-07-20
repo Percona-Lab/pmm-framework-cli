@@ -27,7 +27,8 @@ const questions = {
       { name: 'MySQL (ms)', value: 'ms' },
       { name: 'MariaDB (md)', value: 'md' },
       { name: 'Percona XtraDB Cluster (pxc)', value: 'pxc' },
-      { name: 'MongoDB (mo)', value: 'mo' },
+      { name: 'MongoDB (mo)   - Percona Server for MongoDB', value: 'mo' },
+      { name: 'MongoDB (modb) - Official MongoDB', value: 'modb' },
       { name: 'PostgreSQL (pgsql)', value: 'pgsql' }
     ],
     result(names) {   // This function returns just the short forms of DBs selected

@@ -10,6 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "commander": "^5.1.0",
-    "enquirer": "^2.3.6"
+    "enquirer": "^2.3.6",
+    "shelljs": "^0.8.4"
   }
 }

@@ -3,6 +3,7 @@
 const program = require('commander'); // TODO: Make script more CLI friendly, provide description etc. using CommanderJS
 const { Input, Select, MultiSelect, NumberPrompt } = require('enquirer');
 const { questions } = require('./questions');
+const shell = require('shelljs');
 
 // CommanderJS configuration for CLI flags and help menu
 program
@@ -87,8 +88,10 @@ async function install_client(){
       await md_flags();
     }else if(db_list[db_index] == 'pxc'){
       await pxc_flags();
-    }else if(db_list[db_index] == 'mo'){
+    }else if(db_list[db_index] == 'mo'){    // Percona Server for MongoDB
       await mo_flags();
+    }else if(db_list[db_index] == 'modb'){  // Official MongoDB
+      await modb_flags();
     }else if(db_list[db_index] == 'pgsql'){
       await pgsql_flags();
     }
@@ -125,6 +128,10 @@ async function mo_flags(){
 
 }
 
+async function modb_flags(){
+
+}
+
 async function pgsql_flags(){
 
 }
@@ -133,7 +140,11 @@ async function vagrant_up(){
   console.log("\nVagrant Box setup in progress...");
   let vagrant_os = await new Select(questions.q_vagrant_os).run();
   if(vagrant_os == "Ubuntu"){
-    
+    console.log("****** Initializing Vagrant Box ******");
+    shell.mkdir('-p', './vagrantboxes/client');
+    shell.cp('./vagrantfiles/Ubuntu/Vagrantfile', './vagrantboxes/client');
+    shell.cd('./vagrantboxes/client');
+    shell.exec('vagrant up');
   }else{
 
   }
