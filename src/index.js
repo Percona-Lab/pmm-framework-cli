@@ -20,11 +20,9 @@ async function getConfig(){
 
   if(operation_choice == "Install pmm-server"){
     await install_server();
-  }
-  else if(operation_choice == "Install pmm-client"){
+  }else if(operation_choice == "Install pmm-client"){
     await install_client();
-  }
-  else{
+  }else{
     console.log("Yet to be implemented. Terminating...\n");
   }
 
@@ -38,14 +36,12 @@ async function install_server(){
   let pmm_version = await new Select(questions.q_pmm_version).run();
   if(pmm_version == "Custom"){
     pmm_version = await new Input(questions.q_pmm_custom_version).run();
+  }else if(pmm_version == "dev-latest"){
+    parameter_string += " --dev --pmm-server-version " + pmm_version;
+  }else{
+    parameter_string += " --pmm-server-version " + pmm_version;
   }
-  parameter_string += " --pmm-server-version " + pmm_version;
 
-  // Ask for dev repo installation
-  if(await new Select(questions.q_dev_repo).run() == "Yes"){
-    parameter_string += " --dev"
-  }
-  
   // Ask if setup needs to be done on new Vagrant box
   let setup_vagrant = await new Select(questions.q_setup_vagrant).run();
   if(setup_vagrant == "Yes"){

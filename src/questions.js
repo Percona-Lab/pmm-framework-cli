@@ -8,7 +8,7 @@ const questions = {
   q_pmm_version : {
     name: 'pmm-version',
     message: 'Select PMM version to be installed: ',
-    choices: ['2.7.0', '2.6.0', 'Custom']
+    choices: ['2.9.0', '2.8.0', 'dev-latest (This will enable development repo)', 'Custom']
   },
   q_pmm_custom_version : {
     message: 'Enter PMM version you want to install: ',
