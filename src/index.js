@@ -46,6 +46,12 @@ async function install_server(){
     parameter_string += " --dev"
   }
   
+  // Ask if setup needs to be done on new Vagrant box
+  let setup_vagrant = await new Select(questions.q_setup_vagrant).run();
+  if(setup_vagrant == "Yes"){
+    await vagrant_up_server();
+  }
+
   console.log(parameter_string);
   // TODO: Add further setup for Vagrant box and pmm-server installation script
 }
@@ -101,7 +107,7 @@ async function install_client(){
   // Ask if setup needs to be done on new Vagrant box
   let setup_vagrant = await new Select(questions.q_setup_vagrant).run();
   if(setup_vagrant == "Yes"){
-    await vagrant_up();
+    await vagrant_up_client();
   }
 
   console.log("Database instances count: ", db_count);
@@ -136,17 +142,51 @@ async function pgsql_flags(){
 
 }
 
-async function vagrant_up(){
+async function vagrant_up_client(){
   console.log("\nVagrant Box setup in progress...");
   let vagrant_os = await new Select(questions.q_vagrant_os).run();
   if(vagrant_os == "Ubuntu"){
     console.log("****** Initializing Vagrant Box ******");
     shell.mkdir('-p', './vagrantboxes/client');
-    shell.cp('./vagrantfiles/Ubuntu/Vagrantfile', './vagrantboxes/client');
+    shell.cp('./vagrantfiles/ubuntu/Vagrantfile', './vagrantboxes/client');
+    shell.cp('./vagrantfiles/ubuntu/provision.sh', './vagrantboxes/client');
     shell.cd('./vagrantboxes/client');
+    shell.exec('echo >> provision.sh');
+    shell.exec(`echo ${parameter_string} >> provision.sh`);
     shell.exec('vagrant up');
   }else{
+    console.log("****** Initializing Vagrant Box ******");
+    shell.mkdir('-p', './vagrantboxes/client');
+    shell.cp('./vagrantfiles/centos/Vagrantfile', './vagrantboxes/client');
+    shell.cp('./vagrantfiles/centos/provision.sh', './vagrantboxes/client');
+    shell.cd('./vagrantboxes/client');
+    shell.exec('echo >> provision.sh');
+    shell.exec(`echo ${parameter_string} >> provision.sh`);
+    shell.exec('vagrant up');
+  }
+}
 
+async function vagrant_up_server(){
+  console.log("\nVagrant Box setup in progress...");
+  let vagrant_os = await new Select(questions.q_vagrant_os).run();
+  if(vagrant_os == "Ubuntu"){
+    console.log("****** Initializing Vagrant Box ******");
+    shell.mkdir('-p', './vagrantboxes/server');
+    shell.cp('./vagrantfiles/ubuntu/Vagrantfile', './vagrantboxes/server');
+    shell.cp('./vagrantfiles/ubuntu/provision.sh', './vagrantboxes/server');
+    shell.cd('./vagrantboxes/server');
+    shell.exec('echo >> provision.sh');
+    shell.exec(`echo ${parameter_string} >> provision.sh`);
+    shell.exec('vagrant up');
+  }else{
+    console.log("****** Initializing Vagrant Box ******");
+    shell.mkdir('-p', './vagrantboxes/server');
+    shell.cp('./vagrantfiles/centos/Vagrantfile', './vagrantboxes/server');
+    shell.cp('./vagrantfiles/centos/provision.sh', './vagrantboxes/server');
+    shell.cd('./vagrantboxes/server');
+    shell.exec('echo >> provision.sh');
+    shell.exec(`echo ${parameter_string} >> provision.sh`);
+    shell.exec('vagrant up');
   }
 }
 
