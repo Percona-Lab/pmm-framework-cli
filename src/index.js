@@ -46,6 +46,11 @@ async function install_server(){
   let setup_vagrant = await new Select(questions.q_setup_vagrant).run();
   if(setup_vagrant == "Yes"){
     await vagrant_up_server();
+  }else{
+    console.log('Executing pmm-framework on current machine...');
+    shell.mkdir('-p', './pmm-framework');
+    shell.cd('./pmm-framework');
+    shell.exec(`${parameter_string}`);
   }
 
   console.log(parameter_string);

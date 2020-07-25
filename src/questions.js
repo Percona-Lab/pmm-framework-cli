@@ -3,12 +3,12 @@ const questions = {
   q_operation_choice : {
     name: 'pmm-server-client',
     message: 'Select operation: ',
-    choices: ['Install pmm-server', 'Install pmm-client', 'Wipe all pmm configuration', 'Remove client at given IP', 'Remove server at given IP']
+    choices: ['Install pmm-server', 'Install pmm-client', 'Destroy all VagrantBoxes', 'Wipe all pmm configuration', 'Remove client at given IP', 'Remove server at given IP']
   },
   q_pmm_version : {
     name: 'pmm-version',
     message: 'Select PMM version to be installed: ',
-    choices: ['2.9.0', '2.8.0', 'dev-latest (This will enable development repo)', 'Custom']
+    choices: ['2.9.0', '2.8.0', 'dev-latest', 'Custom']
   },
   q_pmm_custom_version : {
     message: 'Enter PMM version you want to install: ',
@@ -53,6 +53,11 @@ const questions = {
     name: 'Vagrant OS',
     message: 'Select OS for the Vagrant Box: ',
     choices: ['Ubuntu', 'CentOS']
+  },
+  q_ssl : {
+    name : 'Generate SSL certificate',
+    message: 'Would you like to enable SSL encryption to protect PMM from unauthorized access?',
+    choices: ['Yes', 'No']
   }
 };
 
