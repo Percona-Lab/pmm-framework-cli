@@ -4,7 +4,8 @@
   "description": "User friendly CLI tool to use pmm-framework.sh",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cli": "node ./src/index.js"
   },
   "author": "Meet Patel",
   "license": "MIT",

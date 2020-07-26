@@ -56,8 +56,12 @@ const questions = {
   },
   q_ssl : {
     name : 'Generate SSL certificate',
-    message: 'Would you like to enable SSL encryption to protect PMM from unauthorized access?',
+    message: 'Would you like to enable SSL encryption on PMM-Server? (Generates SSL cert on pmm-server machine)',
     choices: ['Yes', 'No']
+  },
+  q_server_ip : {
+    message: 'Enter PMM-server IP: ',
+    initial: '192.168.33.x'
   }
 };
 
