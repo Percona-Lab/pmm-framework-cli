@@ -30,7 +30,7 @@ async function getConfig(){
 
 
 async function install_server(){
-  parameter_string += " --setup"
+  parameter_string += " --setup-server";
 
   console.log("\nProvide server information...\n");
   let pmm_version = await new Select(questions.q_pmm_version).run();
@@ -59,6 +59,8 @@ async function install_server(){
 
 
 async function install_client(){
+  parameter_string += " --setup-client";
+
   console.log("Provide pmm-client information\n...");
 
   // Ask pmm-client version
@@ -68,10 +70,9 @@ async function install_client(){
   }
   parameter_string += " --pmm-server-version " + pmm_version; // Note: --pmm-client-version is not a defined flag in pmm-framework
   
-  // Ask for dev repo installation
-  if(await new Select(questions.q_dev_repo).run() == "Yes"){
-    parameter_string += " --dev"
-  }
+  // Ask for PMM-Server IP
+  pmm_server_ip = await new Input(questions.q_server_ip).run();
+  parameter_string += " --pmm2-server-ip " + pmm_server_ip;
 
   // Ask for DBs to be installed
   let db_list = await new MultiSelect(questions.q_select_db).run();
@@ -115,55 +116,41 @@ async function install_client(){
   console.log(parameter_string);
 }
 
-async function ps_flags(){
+async function ps_flags(){}
 
-}
+async function ms_flags(){}
 
-async function ms_flags(){
+async function md_flags(){}
 
-}
+async function pxc_flags(){}
 
-async function md_flags(){
+async function mo_flags(){}
 
-}
+async function modb_flags(){}
 
-async function pxc_flags(){
-
-}
-
-async function mo_flags(){
-
-}
-
-async function modb_flags(){
-
-}
-
-async function pgsql_flags(){
-
-}
+async function pgsql_flags(){}
 
 async function vagrant_up_client(){
   console.log("\nVagrant Box setup in progress...");
   let vagrant_os = await new Select(questions.q_vagrant_os).run();
   if(vagrant_os == "Ubuntu"){
     console.log("****** Initializing Vagrant Box ******");
-    shell.mkdir('-p', './vagrantboxes/client');
-    shell.cp('./vagrantfiles/ubuntu/Vagrantfile', './vagrantboxes/client');
-    shell.cp('./vagrantfiles/ubuntu/provision.sh', './vagrantboxes/client');
-    shell.cd('./vagrantboxes/client');
-    shell.exec('echo >> provision.sh');
+    shell.mkdir(`-p`, `${__dirname}/vagrantboxes/client`);
+    shell.cp(`${__dirname}/vagrantfiles/client/ubuntu/Vagrantfile`, `${__dirname}/vagrantboxes/client`);
+    shell.cp(`${__dirname}/vagrantfiles/client/ubuntu/provision.sh`, `${__dirname}/vagrantboxes/client`);
+    shell.cd(`${__dirname}/vagrantboxes/client`);
+    shell.exec(`echo >> provision.sh`);
     shell.exec(`echo ${parameter_string} >> provision.sh`);
-    shell.exec('vagrant up');
+    shell.exec(`vagrant up`);
   }else{
     console.log("****** Initializing Vagrant Box ******");
-    shell.mkdir('-p', './vagrantboxes/client');
-    shell.cp('./vagrantfiles/centos/Vagrantfile', './vagrantboxes/client');
-    shell.cp('./vagrantfiles/centos/provision.sh', './vagrantboxes/client');
-    shell.cd('./vagrantboxes/client');
-    shell.exec('echo >> provision.sh');
+    shell.mkdir(`-p`, `${__dirname}/vagrantboxes/client`);
+    shell.cp(`${__dirname}/vagrantfiles/centos/Vagrantfile`, `${__dirname}/vagrantboxes/client`);
+    shell.cp(`${__dirname}/vagrantfiles/centos/provision.sh`, `${__dirname}/vagrantboxes/client`);
+    shell.cd(`./vagrantboxes/client`);
+    shell.exec(`echo >> provision.sh`);
     shell.exec(`echo ${parameter_string} >> provision.sh`);
-    shell.exec('vagrant up');
+    shell.exec(`vagrant up`);
   }
 }
 
@@ -172,22 +159,22 @@ async function vagrant_up_server(){
   let vagrant_os = await new Select(questions.q_vagrant_os).run();
   if(vagrant_os == "Ubuntu"){
     console.log("****** Initializing Vagrant Box ******");
-    shell.mkdir('-p', './vagrantboxes/server');
-    shell.cp('./vagrantfiles/ubuntu/Vagrantfile', './vagrantboxes/server');
-    shell.cp('./vagrantfiles/ubuntu/provision.sh', './vagrantboxes/server');
-    shell.cd('./vagrantboxes/server');
-    shell.exec('echo >> provision.sh');
+    shell.mkdir(`-p`, `${__dirname}/vagrantboxes/server`);
+    shell.cp(`${__dirname}/vagrantfiles/server/ubuntu/Vagrantfile`, `${__dirname}/vagrantboxes/server`);
+    shell.cp(`${__dirname}/vagrantfiles/server/ubuntu/provision.sh`, `${__dirname}/vagrantboxes/server`);
+    shell.cd(`${__dirname}/vagrantboxes/server`);
+    shell.exec(`echo >> provision.sh`);
     shell.exec(`echo ${parameter_string} >> provision.sh`);
-    shell.exec('vagrant up');
+    shell.exec(`vagrant up`);
   }else{
     console.log("****** Initializing Vagrant Box ******");
-    shell.mkdir('-p', './vagrantboxes/server');
-    shell.cp('./vagrantfiles/centos/Vagrantfile', './vagrantboxes/server');
-    shell.cp('./vagrantfiles/centos/provision.sh', './vagrantboxes/server');
-    shell.cd('./vagrantboxes/server');
-    shell.exec('echo >> provision.sh');
+    shell.mkdir(`-p`, `${__dirname}/vagrantboxes/server`);
+    shell.cp(`${__dirname}/vagrantfiles/centos/Vagrantfile`, `${__dirname}/vagrantboxes/server`);
+    shell.cp(`${__dirname}/vagrantfiles/centos/provision.sh`, `${__dirname}/vagrantboxes/server`);
+    shell.cd(`${__dirname}/vagrantboxes/server`);
+    shell.exec(`echo >> provision.sh`);
     shell.exec(`echo ${parameter_string} >> provision.sh`);
-    shell.exec('vagrant up');
+    shell.exec(`vagrant up`);
   }
 }
 

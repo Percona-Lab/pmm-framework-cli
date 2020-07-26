@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# apt-get update
+apt-get update
 # apt-get upgrade
 
 # Install required packages
