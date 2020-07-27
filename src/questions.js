@@ -3,7 +3,7 @@ const questions = {
   q_operation_choice : {
     name: 'pmm-server-client',
     message: 'Select operation: ',
-    choices: ['Install pmm-server', 'Install pmm-client', 'Destroy all VagrantBoxes', 'Wipe all pmm configuration', 'Remove client at given IP', 'Remove server at given IP']
+    choices: ['Install pmm-server', 'Install pmm-client', 'Destroy a VagrantBox', 'Wipe all pmm configuration', 'Remove client at given IP', 'Remove server at given IP']
   },
   q_pmm_version : {
     name: 'pmm-version',
@@ -62,6 +62,11 @@ const questions = {
   q_server_ip : {
     message: 'Enter PMM-server IP: ',
     initial: '192.168.33.x'
+  },
+  q_select_vbox : {
+    name: 'Select Vagrant Box Dir',
+    message : 'Select Vagrant Boxes to destroy (Select multiple using Space bar): ',
+    choices: ['dummy1', 'dummy2'] // Choices for this question will be populated at runtime
   }
 };
 

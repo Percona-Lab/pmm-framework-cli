@@ -4,6 +4,8 @@ const program = require('commander'); // TODO: Make script more CLI friendly, pr
 const { Input, Select, MultiSelect, NumberPrompt } = require('enquirer');
 const { questions } = require('./questions');
 const shell = require('shelljs');
+const fs = require("fs")
+const path = require("path")
 
 // CommanderJS configuration for CLI flags and help menu
 program
@@ -22,6 +24,8 @@ async function getConfig(){
     await install_server();
   }else if(operation_choice == "Install pmm-client"){
     await install_client();
+  }else if(operation_choice == "Destroy a VagrantBox"){
+    await destroy_vbox();
   }else{
     console.log("Yet to be implemented. Terminating...\n");
   }
@@ -176,6 +180,41 @@ async function vagrant_up_server(){
     shell.exec(`echo ${parameter_string} >> provision.sh`);
     shell.exec(`vagrant up`);
   }
+}
+
+async function destroy_vbox(){
+  let vagrantDirs = getVagrantDirs(__dirname + "/vagrantboxes"); // Get directories of vagrant boxes
+  if(vagrantDirs.length > 0){
+    questions.q_select_vbox.choices = vagrantDirs; // Look for currently installed Vagrant Boxes
+    let remove_vagrant = await new MultiSelect(questions.q_select_vbox).run();
+
+    for(let dir in remove_vagrant){
+      console.log(`Destroying ${remove_vagrant[dir]}...`);
+      shell.cd(remove_vagrant[dir]);
+      shell.exec(`vagrant destroy -f`);
+      shell.rm('-rf', `${remove_vagrant[dir]}`)
+    }
+  }
+}
+
+function getVagrantDirs(dirPath, arrayOfFiles) {
+  try{
+    files = fs.readdirSync(dirPath)
+  }catch(e){
+    console.log("No VagrantBoxes found.");
+    return [];
+  }
+  arrayOfFiles = arrayOfFiles || []
+
+  files.forEach(function(file) {
+    if (fs.statSync(dirPath + "/" + file).isDirectory()) {
+      arrayOfFiles = getVagrantDirs(dirPath + "/" + file, arrayOfFiles);
+    } else if(file == "Vagrantfile") {
+      arrayOfFiles.push(dirPath);
+    }
+  })
+
+  return arrayOfFiles;
 }
 
 getConfig();
