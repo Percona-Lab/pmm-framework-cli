@@ -24,7 +24,7 @@ chmod +x ./src/index.js
   * By default, guest `port 80` is forwarded to host `port 8080` (Can be changed from Vagrantfile)
 
 ## Screenshots
-![Screenshot](https://user-images.githubusercontent.com/45785817/87336900-341bf080-c560-11ea-8d37-d70bd4f3cf50.png)
+![Screenshot](https://user-images.githubusercontent.com/45785817/88704751-2c497800-d12c-11ea-8a81-61f0fc3b7115.png)
 
 ***
 * This CLI tool is made using:
