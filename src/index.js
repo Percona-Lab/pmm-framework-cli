@@ -6,6 +6,7 @@ const { questions } = require('./questions');
 const shell = require('shelljs');
 const fs = require("fs")
 const path = require("path")
+const child_process = require('child_process');  // Another Shell API for commands that require user input
 
 // CommanderJS configuration for CLI flags and help menu
 program
@@ -157,7 +158,7 @@ async function vagrant_up_client(){
     shell.cd(`${__dirname}/vagrantboxes/client`);
     shell.exec(`echo >> provision.sh`);
     shell.exec(`echo ${parameter_string} >> provision.sh`);
-    shell.exec(`vagrant up`);
+    child_process.execSync('vagrant up', {stdio: 'inherit'});
   }else{
     console.log("****** Initializing Vagrant Box ******");
     shell.mkdir(`-p`, `${__dirname}/vagrantboxes/client`);
@@ -166,7 +167,7 @@ async function vagrant_up_client(){
     shell.cd(`./vagrantboxes/client`);
     shell.exec(`echo >> provision.sh`);
     shell.exec(`echo ${parameter_string} >> provision.sh`);
-    shell.exec(`vagrant up`);
+    child_process.execSync('vagrant up', {stdio: 'inherit'});
   }
 }
 
@@ -181,7 +182,7 @@ async function vagrant_up_server(){
     shell.cd(`${__dirname}/vagrantboxes/server`);
     shell.exec(`echo >> provision.sh`);
     shell.exec(`echo ${parameter_string} >> provision.sh`);
-    shell.exec(`vagrant up`);
+    child_process.execSync('vagrant up', {stdio: 'inherit'});
   }else{
     console.log("****** Initializing Vagrant Box ******");
     shell.mkdir(`-p`, `${__dirname}/vagrantboxes/server`);
@@ -190,7 +191,7 @@ async function vagrant_up_server(){
     shell.cd(`${__dirname}/vagrantboxes/server`);
     shell.exec(`echo >> provision.sh`);
     shell.exec(`echo ${parameter_string} >> provision.sh`);
-    shell.exec(`vagrant up`);
+    child_process.execSync('vagrant up', {stdio: 'inherit'});
   }
 }
 
