@@ -3,7 +3,7 @@ const questions = {
   q_operation_choice : {
     name: 'pmm-server-client',
     message: 'Select operation: ',
-    choices: ['Install pmm-server', 'Install pmm-client', 'List VagrantBoxes (directories)', 'Destroy VagrantBox(s)']
+    choices: ['Install pmm-server', 'Install pmm-client', 'List VagrantBoxes (directories)', 'Destroy VagrantBox(s)', 'Get IP of a VagrantBox']
   },
   q_pmm_version : {
     name: 'pmm-version',
@@ -72,6 +72,11 @@ const questions = {
     name: 'Whether get_download_link.sh to be used?',
     message: 'Is get_download_link.sh to be used?',
     choices: ['Yes', 'No']
+  },
+  q_get_ip : {
+    name: 'Select Vagrant Box Dir',
+    message: 'Select VagrantBox directory to get IP of: ',
+    choices: ['dummy1', 'dummy2'] // Choices for this question will be populated at runtime
   }
 };
 
