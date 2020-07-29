@@ -190,9 +190,12 @@ async function destroy_vbox(){
 
     for(let dir in remove_vagrant){
       console.log(`Destroying ${remove_vagrant[dir]}...`);
-      shell.cd(remove_vagrant[dir]);
-      shell.exec(`vagrant destroy -f`);
-      shell.rm('-rf', `${remove_vagrant[dir]}`)
+      try{
+        shell.exec(`cd ${remove_vagrant[dir]} ; vagrant destroy -f`);
+        shell.rm('-rf', `${remove_vagrant[dir]}`);
+      }catch(e){
+        console.log("Error: " + e);
+      }
     }
   }
 }
