@@ -24,7 +24,9 @@ async function getConfig(){
     await install_server();
   }else if(operation_choice == "Install pmm-client"){
     await install_client();
-  }else if(operation_choice == "Destroy a VagrantBox"){
+  }else if(operation_choice == "List VagrantBoxes (directories)"){
+    console.log(getVagrantDirs(__dirname + "/vagrantboxes"));
+  }else if(operation_choice == "Destroy VagrantBox(s)"){
     await destroy_vbox();
   }else{
     console.log("Yet to be implemented. Terminating...\n");
@@ -81,6 +83,14 @@ async function install_client(){
   // Ask for DBs to be installed
   let db_list = await new MultiSelect(questions.q_select_db).run();
   console.log("DBs selected are: ", db_list);
+
+  // Ask for get_download_link.sh
+  if(db_list.length > 0){
+    let use_get_download_sh = await new Select(questions.q_get_download_link).run();
+    if(use_get_download_sh == "Yes"){
+      parameter_string += " --download"
+    }
+  }
 
   //Ask DB Specific flags, DB instance count
   db_count = {};
@@ -197,6 +207,8 @@ async function destroy_vbox(){
         console.log("Error: " + e);
       }
     }
+  }else{
+    console.log("No VagrantBoxes found.");
   }
 }
 
