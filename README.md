@@ -22,6 +22,29 @@ chmod +x ./src/index.js
   * Vagrant Box will be set up and provisioned according to user's choices
   * Base `Vagrantfile` and `provision.sh` are available under `/src/vagrantfiles`
   * By default, guest `port 80` is forwarded to host `port 8080` (Can be changed from Vagrantfile)
+  
+### Directory Structure
+
+```
+src
+  ├── index.js
+  ├── questions.js
+  └── vagrantfiles  
+      ├── client  
+      │   ├── centos  
+      │   │   ├── Vagrantfile  
+      │   │   └── provision.sh  
+      │   └── ubuntu  
+      │       ├── Vagrantfile  
+      │       └── provision.sh  
+      └── server  
+          ├── centos  
+          │   ├── Vagrantfile  
+          │   └── provision.sh  
+          └── ubuntu  
+              ├── Vagrantfile  
+              └── provision.sh
+```
 
 ## Screenshots
 ![Screenshot](https://user-images.githubusercontent.com/45785817/88704751-2c497800-d12c-11ea-8a81-61f0fc3b7115.png)
