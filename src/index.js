@@ -31,6 +31,8 @@ async function getConfig(){
     await destroy_vbox();
   }else if(operation_choice == "Get IP of a VagrantBox"){
     await get_ip_vbox();
+  }else if(operation_choice == "Execute a command on selected Vagrantbox"){
+    await exec_in_vbox();
   }else{
     console.log("Yet to be implemented. Terminating...\n");
   }
@@ -246,6 +248,19 @@ async function get_ip_vbox(){
     console.log("No VagrantBoxes found.");
   }
 
+}
+
+async function exec_in_vbox(){
+  let vagrantDirs = getVagrantDirs(__dirname + "/vagrantboxes"); // Get directories of vagrant boxes
+  if(vagrantDirs.length > 0){
+    questions.q_exec_in_vbox.choices = vagrantDirs; // Look for currently installed Vagrant Boxes
+    let selected_box = await new Select(questions.q_exec_in_vbox).run();
+    let exec_command = await new Input(questions.q_exec_command).run();
+    console.log("\nExecuting...\n");
+    shell.exec(`cd ${selected_box} ; vagrant ssh -c "${exec_command}" `); // Get IP from selected box
+  }else{
+    console.log("No VagrantBoxes found.");
+  }
 }
 
 getConfig();

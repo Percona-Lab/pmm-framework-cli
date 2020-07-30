@@ -3,7 +3,7 @@ const questions = {
   q_operation_choice : {
     name: 'pmm-server-client',
     message: 'Select operation: ',
-    choices: ['Install pmm-server', 'Install pmm-client', 'List VagrantBoxes (directories)', 'Destroy VagrantBox(s)', 'Get IP of a VagrantBox']
+    choices: ['Install pmm-server', 'Install pmm-client', 'List VagrantBoxes (directories)', 'Destroy VagrantBox(s)', 'Get IP of a VagrantBox', 'Execute a command on selected Vagrantbox']
   },
   q_pmm_version : {
     name: 'pmm-version',
@@ -77,6 +77,14 @@ const questions = {
     name: 'Select Vagrant Box Dir',
     message: 'Select VagrantBox directory to get IP of: ',
     choices: ['dummy1', 'dummy2'] // Choices for this question will be populated at runtime
+  },
+  q_exec_in_vbox : {
+    name: 'Select VagrantBox Dir',
+    message: 'Select VagrantBox to execute command in: ',
+    choices: ['dummy1', 'dummy2'] // Choices for this question will be populated at runtime
+  },
+  q_exec_command : {
+    message: 'Enter command to execute: ',
   }
 };
 

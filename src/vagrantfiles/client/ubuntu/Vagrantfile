@@ -40,6 +40,6 @@ Vagrant.configure("2") do |config|
   end
 
   # Provisioning
-  # config.vm.provision :docker # Docker not needed in Client
+  config.vm.provision :docker # Docker needed for client to add some of the DB instances
   config.vm.provision "shell", path: "./provision.sh"
 end
