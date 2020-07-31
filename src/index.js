@@ -33,6 +33,8 @@ async function getConfig(){
     await get_ip_vbox();
   }else if(operation_choice == "Execute a command on selected Vagrantbox"){
     await exec_in_vbox();
+  }else if(operation_choice == "Execute PMM Framework on current machine"){
+    await exec_framework();
   }else{
     console.log("Yet to be implemented. Terminating...\n");
   }
@@ -261,6 +263,16 @@ async function exec_in_vbox(){
   }else{
     console.log("No VagrantBoxes found.");
   }
+}
+
+async function exec_framework(){
+  console.log("Enter only the flags/options to pass to pmm-framework.");
+  questions.q_exec_command.initial = '--pmm2 ';
+  let exec_command = await new Input(questions.q_exec_command).run();
+  shell.mkdir('-p', `${__dirname}/pmm-framework`);
+  shell.cd(`${__dirname}/pmm-framework`);
+  shell.exec(`wget https://raw.githubusercontent.com/percona/pmm-qa/GSOC-2020/pmm-tests/pmm-framework.sh ; chmod +x pmm-framework.sh`);
+  shell.exec(`./pmm-framework.sh ${exec_command}`);
 }
 
 getConfig();

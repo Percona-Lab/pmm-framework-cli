@@ -21,3 +21,6 @@ node_modules/
 
 # Local Vagrant Installations
 vagrantboxes/
+
+# pmm-framework
+pmm-framework/
