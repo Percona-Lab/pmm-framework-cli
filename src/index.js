@@ -25,6 +25,8 @@ async function getConfig(){
     await install_server();
   }else if(operation_choice == "Install pmm-client"){
     await install_client();
+  }else if(operation_choice == "Install pmm-server and pmm-client on same machine"){
+    await install_server_client();
   }else if(operation_choice == "List VagrantBoxes (directories)"){
     console.log(getVagrantDirs(__dirname + "/vagrantboxes"));
   }else if(operation_choice == "Destroy VagrantBox(s)"){
@@ -49,6 +51,7 @@ async function install_server(){
   let pmm_version = await new Select(questions.q_pmm_version).run();
   if(pmm_version == "Custom"){
     pmm_version = await new Input(questions.q_pmm_custom_version).run();
+    parameter_string += " --pmm-server-version " + pmm_version;
   }else if(pmm_version == "dev-latest"){
     parameter_string += " --dev --pmm-server-version " + pmm_version;
   }else{
@@ -61,11 +64,86 @@ async function install_server(){
     await vagrant_up_server();
   }else{
     console.log('Executing pmm-framework on current machine...');
-    shell.mkdir('-p', './pmm-framework');
-    shell.cd('./pmm-framework');
+    shell.mkdir('-p', `${__dirname}/pmm-framework`);
+    shell.cd(`${__dirname}/pmm-framework`);
     shell.exec(`${parameter_string}`);
   }
 
+  console.log(parameter_string);
+  // TODO: Add further setup for Vagrant box and pmm-server installation script
+}
+
+async function install_server_client(){
+  parameter_string += " --setup";
+
+  // Asking Server Information
+  console.log("\nProvide server information...\n");
+  let pmm_version = await new Select(questions.q_pmm_version).run();
+  if(pmm_version == "Custom"){
+    pmm_version = await new Input(questions.q_pmm_custom_version).run();
+    parameter_string += " --pmm-server-version " + pmm_version;
+  }else if(pmm_version == "dev-latest"){
+    parameter_string += " --dev --pmm-server-version " + pmm_version;
+  }else{
+    parameter_string += " --pmm-server-version " + pmm_version;
+  }
+
+  // Asking Client information
+  console.log("\nProvide pmm-client information...\n");
+
+  // Ask for DBs to be installed
+  let db_list = await new MultiSelect(questions.q_select_db).run();
+  console.log("DBs selected are: ", db_list);
+
+  // flag for get_download_link.sh
+  if(db_list.length > 0){
+    parameter_string += " --download"
+  }
+
+  //Ask DB Specific flags, DB instance count
+  db_count = {};
+  for(let db_index in db_list){
+    console.log("\nProvide details for: ", db_list[db_index]);
+
+    // Ask DB instance count
+    db_count[db_list[db_index]] = await new NumberPrompt(questions.q_db_count).run();
+    parameter_string += " --addclient=" + db_list[db_index] + "," + db_count[db_list[db_index]].toString();
+  }
+
+
+  // Ask if setup needs to be done on new Vagrant box
+  let setup_vagrant = await new Select(questions.q_setup_vagrant).run();
+  if(setup_vagrant == "Yes"){
+    console.log("\nVagrant Box setup in progress...");
+    let vagrant_os = await new Select(questions.q_vagrant_os).run();
+    if(vagrant_os == "Ubuntu"){
+      console.log("****** Initializing Vagrant Box ******");
+      shell.mkdir(`-p`, `${__dirname}/vagrantboxes/serverclient`);
+      shell.cp(`${__dirname}/vagrantfiles/server/ubuntu/Vagrantfile`, `${__dirname}/vagrantboxes/serverclient`);
+      shell.cp(`${__dirname}/vagrantfiles/server/ubuntu/provision.sh`, `${__dirname}/vagrantboxes/serverclient`);
+      shell.cd(`${__dirname}/vagrantboxes/serverclient`);
+      shell.exec(`echo >> provision.sh`);
+      shell.exec(`echo ${parameter_string} >> provision.sh`);
+      child_process.execSync('vagrant up', {stdio: 'inherit'});
+    }else{
+      console.log("****** Initializing Vagrant Box ******");
+      shell.mkdir(`-p`, `${__dirname}/vagrantboxes/serverclient`);
+      shell.cp(`${__dirname}/vagrantfiles/server/centos/Vagrantfile`, `${__dirname}/vagrantboxes/serverclient`);
+      shell.cp(`${__dirname}/vagrantfiles/server/centos/provision.sh`, `${__dirname}/vagrantboxes/serverclient`);
+      shell.cd(`${__dirname}/vagrantboxes/serverclient`);
+      shell.exec(`echo >> provision.sh`);
+      shell.exec(`echo ${parameter_string} >> provision.sh`);
+      child_process.execSync('vagrant up', {stdio: 'inherit'});
+    }
+
+  }else{
+    console.log('Executing pmm-framework on current machine...');
+    shell.mkdir('-p', `${__dirname}/pmm-framework`);
+    shell.cd(`${__dirname}/pmm-framework`);
+    shell.exec(`${parameter_string}`);
+  }
+
+  console.log("Database instances count: ", db_count);
   console.log(parameter_string);
   // TODO: Add further setup for Vagrant box and pmm-server installation script
 }
@@ -91,12 +169,8 @@ async function install_client(){
   let db_list = await new MultiSelect(questions.q_select_db).run();
   console.log("DBs selected are: ", db_list);
 
-  // Ask for get_download_link.sh
   if(db_list.length > 0){
-    let use_get_download_sh = await new Select(questions.q_get_download_link).run();
-    if(use_get_download_sh == "Yes"){
-      parameter_string += " --download"
-    }
+    parameter_string += " --download"
   }
 
   //Ask DB Specific flags, DB instance count
@@ -151,30 +225,6 @@ async function modb_flags(){}
 
 async function pgsql_flags(){}
 
-async function vagrant_up_client(){
-  console.log("\nVagrant Box setup in progress...");
-  let vagrant_os = await new Select(questions.q_vagrant_os).run();
-  if(vagrant_os == "Ubuntu"){
-    console.log("****** Initializing Vagrant Box ******");
-    shell.mkdir(`-p`, `${__dirname}/vagrantboxes/client`);
-    shell.cp(`${__dirname}/vagrantfiles/client/ubuntu/Vagrantfile`, `${__dirname}/vagrantboxes/client`);
-    shell.cp(`${__dirname}/vagrantfiles/client/ubuntu/provision.sh`, `${__dirname}/vagrantboxes/client`);
-    shell.cd(`${__dirname}/vagrantboxes/client`);
-    shell.exec(`echo >> provision.sh`);
-    shell.exec(`echo ${parameter_string} >> provision.sh`);
-    child_process.execSync('vagrant up', {stdio: 'inherit'});
-  }else{
-    console.log("****** Initializing Vagrant Box ******");
-    shell.mkdir(`-p`, `${__dirname}/vagrantboxes/client`);
-    shell.cp(`${__dirname}/vagrantfiles/centos/Vagrantfile`, `${__dirname}/vagrantboxes/client`);
-    shell.cp(`${__dirname}/vagrantfiles/centos/provision.sh`, `${__dirname}/vagrantboxes/client`);
-    shell.cd(`./vagrantboxes/client`);
-    shell.exec(`echo >> provision.sh`);
-    shell.exec(`echo ${parameter_string} >> provision.sh`);
-    child_process.execSync('vagrant up', {stdio: 'inherit'});
-  }
-}
-
 async function vagrant_up_server(){
   console.log("\nVagrant Box setup in progress...");
   let vagrant_os = await new Select(questions.q_vagrant_os).run();
@@ -190,14 +240,39 @@ async function vagrant_up_server(){
   }else{
     console.log("****** Initializing Vagrant Box ******");
     shell.mkdir(`-p`, `${__dirname}/vagrantboxes/server`);
-    shell.cp(`${__dirname}/vagrantfiles/centos/Vagrantfile`, `${__dirname}/vagrantboxes/server`);
-    shell.cp(`${__dirname}/vagrantfiles/centos/provision.sh`, `${__dirname}/vagrantboxes/server`);
+    shell.cp(`${__dirname}/vagrantfiles/server/centos/Vagrantfile`, `${__dirname}/vagrantboxes/server`);
+    shell.cp(`${__dirname}/vagrantfiles/server/centos/provision.sh`, `${__dirname}/vagrantboxes/server`);
     shell.cd(`${__dirname}/vagrantboxes/server`);
     shell.exec(`echo >> provision.sh`);
     shell.exec(`echo ${parameter_string} >> provision.sh`);
     child_process.execSync('vagrant up', {stdio: 'inherit'});
   }
 }
+
+async function vagrant_up_client(){
+  console.log("\nVagrant Box setup in progress...");
+  let vagrant_os = await new Select(questions.q_vagrant_os).run();
+  if(vagrant_os == "Ubuntu"){
+    console.log("****** Initializing Vagrant Box ******");
+    shell.mkdir(`-p`, `${__dirname}/vagrantboxes/client`);
+    shell.cp(`${__dirname}/vagrantfiles/client/ubuntu/Vagrantfile`, `${__dirname}/vagrantboxes/client`);
+    shell.cp(`${__dirname}/vagrantfiles/client/ubuntu/provision.sh`, `${__dirname}/vagrantboxes/client`);
+    shell.cd(`${__dirname}/vagrantboxes/client`);
+    shell.exec(`echo >> provision.sh`);
+    shell.exec(`echo ${parameter_string} >> provision.sh`);
+    child_process.execSync('vagrant up', {stdio: 'inherit'});
+  }else{
+    console.log("****** Initializing Vagrant Box ******");
+    shell.mkdir(`-p`, `${__dirname}/vagrantboxes/client`);
+    shell.cp(`${__dirname}/vagrantfiles/client/centos/Vagrantfile`, `${__dirname}/vagrantboxes/client`);
+    shell.cp(`${__dirname}/vagrantfiles/client/centos/provision.sh`, `${__dirname}/vagrantboxes/client`);
+    shell.cd(`${__dirname}/vagrantboxes/client`);
+    shell.exec(`echo >> provision.sh`);
+    shell.exec(`echo ${parameter_string} >> provision.sh`);
+    child_process.execSync('vagrant up', {stdio: 'inherit'});
+  }
+}
+
 
 async function destroy_vbox(){
   let vagrantDirs = getVagrantDirs(__dirname + "/vagrantboxes"); // Get directories of vagrant boxes
@@ -244,7 +319,7 @@ async function get_ip_vbox(){
   if(vagrantDirs.length > 0){
     questions.q_get_ip.choices = vagrantDirs; // Look for currently installed Vagrant Boxes
     let selected_box = await new Select(questions.q_get_ip).run();
-    console.log("\nIP of the selected box is: ");
+    console.log("\nGetting IP of selected VegrantBox...");
     shell.exec(`cd ${selected_box} ; vagrant ssh -c "hostname -I" `); // Get IP from selected box
   }else{
     console.log("No VagrantBoxes found.");

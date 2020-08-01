@@ -3,7 +3,7 @@ const questions = {
   q_operation_choice : {
     name: 'pmm-server-client',
     message: 'Select operation: ',
-    choices: ['Install pmm-server', 'Install pmm-client', 'List VagrantBoxes (directories)', 'Destroy VagrantBox(s)', 'Get IP of a VagrantBox', 'Execute a command on selected Vagrantbox', 'Execute PMM Framework on current machine']
+    choices: ['Install pmm-server', 'Install pmm-client', 'Install pmm-server and pmm-client on same machine', 'List VagrantBoxes (directories)', 'Destroy VagrantBox(s)', 'Get IP of a VagrantBox', 'Execute a command on selected Vagrantbox', 'Execute PMM Framework on current machine']
   },
   q_pmm_version : {
     name: 'pmm-version',
@@ -67,11 +67,6 @@ const questions = {
     name: 'Select Vagrant Box Dir',
     message : 'Select Vagrant Boxes to destroy (Select multiple using Space bar): ',
     choices: ['dummy1', 'dummy2'] // Choices for this question will be populated at runtime
-  },
-  q_get_download_link : {
-    name: 'Whether get_download_link.sh to be used?',
-    message: 'Is get_download_link.sh to be used?',
-    choices: ['Yes', 'No']
   },
   q_get_ip : {
     name: 'Select Vagrant Box Dir',

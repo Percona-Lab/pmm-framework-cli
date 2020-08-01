@@ -1,4 +1,5 @@
 #!/bin/bash
+echo -e "\nIP(s) of current machine are:  $(hostname -I)\n"
 
 # yum update
 
