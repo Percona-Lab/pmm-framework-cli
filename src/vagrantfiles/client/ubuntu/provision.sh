@@ -2,12 +2,12 @@
 
 echo -e "\nIP(s) of current machine are:  $(hostname -I)\n"
 
-apt-get update
+apt-get update >> framework_log
 # apt-get upgrade
 
 # Install required packages
-apt-get install -y git
-apt-get install -y lynx
+apt-get install -y git >> framework_log
+apt-get install -y lynx >> framework_log
 
 # Install Docker # This is needed if not already provisioned through Vagrantfile
 # curl -fsSL https://get.docker.com -o get-docker.sh
