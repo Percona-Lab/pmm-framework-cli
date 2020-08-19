@@ -10,7 +10,7 @@ const child_process = require('child_process');  // Another Shell API for comman
 
 // CommanderJS configuration for CLI flags and help menu
 program
-  .version('1.0.0')
+  .version('1.0.2')
   .description('A CLI tool to use pmm-framework and setup pmm-server, pmm-client with DBs instances locally or inside dedicated Vagrant boxes.')
   .parse(process.argv);
 

@@ -1,6 +1,6 @@
 {
   "name": "pmm-framework-cli",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "User friendly CLI tool to use pmm-framework.sh",
   "main": "src/index.js",
   "bin": "src/index.js",

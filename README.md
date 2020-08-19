@@ -8,6 +8,7 @@ User friendly & cross-platfrom CLI tool to use pmm-framework and quickly deploy 
 
 ## Usage:
 Upon execution, a series of queries will be asked and according to them the required parameters will be passed to `pmm-framework.sh`. This can be used to set up PMM on the current host or Vagrant Box guest.  
+  
 To install `pmm-framework-cli` in current directory:
 ```
 npm i pmm-framework-cli
@@ -15,7 +16,7 @@ npx pmm-framework-cli
 ```
 Or (to install globally)
 ```
-sudo npm i pmm-framework-cli
+sudo npm i -g pmm-framework-cli
 sudo pmm-framework-cli
 ```
 Or
