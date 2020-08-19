@@ -4,8 +4,8 @@ const program = require('commander'); // TODO: Make script more CLI friendly, pr
 const { Input, Select, MultiSelect, NumberPrompt } = require('enquirer');
 const { questions } = require('./questions');
 const shell = require('shelljs');
-const fs = require("fs")
-const path = require("path")
+const fs = require("fs");
+const path = require("path");
 const child_process = require('child_process');  // Another Shell API for commands that require user input
 
 // CommanderJS configuration for CLI flags and help menu
