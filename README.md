@@ -1,5 +1,5 @@
 # pmm-framework-cli
-User friendly & cross-platfrom CLI tool to use pmm-framework and quickly deploy PMM architecture.
+User friendly & cross-platfrom CLI tool to use pmm-framework and quickly deploy PMM architecture, GSoC 2020 Project 
 
 ### Requirements:
 * `NodeJS`
